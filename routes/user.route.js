@@ -7,13 +7,18 @@ var router = express.Router();
 router.get("/login", userController.loginPage);
 
 // register page
-router.get("/register",verify,  userController.registerPage );
+router.get('/register',verify,  userController.registerPage );
 
 router.post('/login', userController.login);
 
-router.post('/register',userController.register)
+router.post('/register',userController.register);
+// show account
+router.get('/my-account/:id', userController.myAccount);
 
-router.get('/my-account/:id', userController.myAccount)
+router.get('/my-account/edit/:id', userController.editUser);
+//edit
+router.patch('/my-account/:id', userController.patchUser);
+
 
 
 module.exports = router;

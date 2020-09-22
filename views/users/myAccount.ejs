@@ -2,6 +2,6 @@
 <body>
     <%- include('../layouts/nav')%> 
     <h1>Hello, <%= user.name %> </h1>
-
+    <a href="/my-account/edit/<%= user.id %>" class="btn btn-info">Edit</a>
     <%- include('../layouts/footer'); %>
 </body>
