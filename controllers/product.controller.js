@@ -1,12 +1,27 @@
 const productModel = require("../models/product.model");
 //const { productValidation } = require("../validation/product.validation");
 const { model } = require("../models/product.model");
-const fs = require('fs');
+const fs = require("fs");
+
+// search product
+module.exports.searchProduct = async (req, res) => {
+  let q = req.query.q;
+  let products = await productModel.find();
+  let matchedProducts = products.filter((product) => {
+    return product.title.indexOf(q) !== -1;
+  });
+  if (matchedProducts.length<1) {
+    res.render("products/searchProducts", {msg:'no search',products: matchedProducts});
+  } else {
+    res.render("products/searchProducts", { products: matchedProducts });
+  }
+};
+
 // get list product
 module.exports.listProduct = async (req, res) => {
   // panigation
   let page = parseInt(req.query.page) || 1;
-  let perPage = 4;// item in page
+  let perPage = 4; // item in page
   let start = (page - 1) * perPage;
   let end = page * perPage;
   let totalProducts = await productModel.find();
@@ -16,7 +31,7 @@ module.exports.listProduct = async (req, res) => {
   res.render("products/index", {
     products: products,
     totalPages: totalPages,
-    page: page
+    page: page,
   });
 };
 
@@ -61,8 +76,8 @@ module.exports.editProduct = async (req, res) => {
           title: title,
           description: description,
           price: price,
-          image: req.body.mybook
-        }
+          image: req.body.mybook,
+        },
       }
     );
     res.redirect("/products");
@@ -72,18 +87,18 @@ module.exports.editProduct = async (req, res) => {
 };
 
 //delete image in public
-module.exports.deleteImage = async (req, res, next)=>{
+module.exports.deleteImage = async (req, res, next) => {
   const product = await productModel.findById(req.params.id);
   const filePath = `./public/${product.image}`;
-  try{
-    fs.unlink(filePath, (err)=>{
+  try {
+    fs.unlink(filePath, (err) => {
       if (err) throw err;
-    })
+    });
     next();
-  }catch{
-    res.send('fail');
+  } catch {
+    res.send("fail");
   }
-}
+};
 
 //delete product
 module.exports.deleteProduct = async function (req, res) {

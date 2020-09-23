@@ -1,0 +1,29 @@
+<%- include('../layouts/header'); %>
+<body>
+    <%- include('../layouts/nav'); %>
+    <h1>Search Products</h1>
+    <div class="container">
+        <div class="row">
+            <% if(products==0){ %> 
+                <p>no search </p>
+        <% }else{ %> 
+            <% products.forEach(product => { %>
+                <div class="col-3">
+                  <img src="/<%= product.image %>" width="200px">
+                  <h4><%= product.title %></h4>
+                  <span><%= product.description %> </span><br>
+                  <span><%= product.price %> </span>
+                  <br>
+                  <a href="#" class="btn btn-primary">Add to Cart</a>
+                  <a href="/products/edit/<%= product.id %>" class="btn btn-info">Edit</a>
+                  <form action="/products/<%= product.id %>?_method=DELETE" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                </div>
+              <% }); %> 
+        <% } %> 
+        </div>
+      </div>
+      <%-// include('./pagination'); %>
+    <%- include('../layouts/footer'); %>
+</body>
