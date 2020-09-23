@@ -1,0 +1,19 @@
+<%- include('../layouts/header'); %>
+
+<body>
+  <%- include('../layouts/nav'); %>
+  <div class="container">
+    <%- include('../msg-err/msg'); %>
+    <form action="/products?_method=PUT"  method="post" enctype="multipart/form-data">
+      <label for="title" class="sr-only">Title</label>
+      <input type="text" id="title" name="title" class="form-control" placeholder="Name" value="<%= product.title %>">
+      <label for="description" class="sr-only">Description</label>
+      <textarea name="description" id="description" class="form-control"><%= product.description %></textarea>
+      <input type="text" id="price" name="price" class="form-control" placeholder="Price" required=""
+        value="<%= product.price %>">
+      <input type="file" name="mybook" class="form-control-file">
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+    </form>
+  </div>
+  <%- include('../layouts/footer'); %>
+</body>

@@ -1,0 +1,27 @@
+<ul class="pagination">
+    <% if(page>3){ %>
+        <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+    <% } %>
+    <% if(page>1){ %>
+        <li class="page-item"><a class="page-link" href="?page=<%= page-1 %> ">Pre</a></li>
+    <% } %>  
+    <% for(var i = 1; i <= totalPages; i++){ %>
+        <% if(i != page){ %>
+            <% if(i>page-3&&i<page+3){ %>    
+            <li class="page-item"><a class="page-link" href="?page=<%= i %>"><%= i %></a></li>
+            <% } %> 
+        <% }else{ %>  
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">
+                   <%= i %> 
+                  <span class="sr-only">(current)</span>
+                </span>
+        <% } %> 
+    <% } %> 
+    <% if(page<totalPages){ %>
+        <li class="page-item"><a class="page-link" href="?page=<%= page+1 %> ">Next</a></li>
+    <% } %> 
+    <% if(page<totalPages-2){ %> 
+        <li class="page-item"><a class="page-link" href="?page=<%= totalPages %>">Last</a></li>
+    <% } %> 
+</ul>

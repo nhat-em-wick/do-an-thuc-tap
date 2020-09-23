@@ -1,24 +1,92 @@
-const productModel = require('../models/product.model');
-const {productValidation} = require('../validation/product.validation');
+const productModel = require("../models/product.model");
+//const { productValidation } = require("../validation/product.validation");
+const { model } = require("../models/product.model");
+const fs = require('fs');
+// get list product
+module.exports.listProduct = async (req, res) => {
+  // panigation
+  let page = parseInt(req.query.page) || 1;
+  let perPage = 4;// item in page
+  let start = (page - 1) * perPage;
+  let end = page * perPage;
+  let totalProducts = await productModel.find();
+  let totalPages = Math.ceil(totalProducts.length / perPage);
+  let products = await (await productModel.find()).slice(start, end);
+  //
+  res.render("products/index", {
+    products: products,
+    totalPages: totalPages,
+    page: page
+  });
+};
 
-module.exports.listProduct = (req, res)=>{
-  res.render('products/index');
-}
+module.exports.showAddProduct = (req, res) => {
+  res.render("products/addProduct");
+};
 
-module.exports.getProduct = (req, res)=>{
-  res.render('products/addProduct');
-}
-
-module.exports.addProduct = (req, res)=>{
+// add product
+module.exports.addProduct = async (req, res) => {
   const { title, description, price } = req.body;
-  req.body.mybook = req.file.path.split('/').slice(1).join('/');
-  const { error } = productValidation(req.body);
-  let errs = [];
-  if (error) {
-    errs.push({ msg: error.details[0].message });
-    res.render("products/addProduct", { errs: errs, title, description, price });
+  req.body.mybook = req.file.path.split("/").slice(1).join("/");
+  try {
+    const product = new productModel({
+      title: title,
+      description: description,
+      price: price,
+      image: req.body.mybook,
+    });
+    let saveProduct = await product.save();
+    res.redirect("/products");
+  } catch (error) {
+    errs.push({ msg: "Add Product Fail!" });
   }
-  
+};
+
+// get product
+module.exports.getProduct = async (req, res) => {
+  const product = await productModel.findById(req.params.id);
+  res.render("products/editProduct", { product: product });
+};
+
+//update product
+module.exports.editProduct = async (req, res) => {
+  const { title, description, price } = req.body;
+  const product = await productModel.findOne({ id: req.params._id });
+  req.body.mybook = req.file.path.split("/").slice(1).join("/");
+  try {
+    let updateProduct = await productModel.updateOne(
+      { _id: product._id },
+      {
+        $set: {
+          title: title,
+          description: description,
+          price: price,
+          image: req.body.mybook
+        }
+      }
+    );
+    res.redirect("/products");
+  } catch {
+    res.render(`product/edit/${product._id}`);
+  }
+};
+
+//delete image in public
+module.exports.deleteImage = async (req, res, next)=>{
+  const product = await productModel.findById(req.params.id);
+  const filePath = `./public/${product.image}`;
+  try{
+    fs.unlink(filePath, (err)=>{
+      if (err) throw err;
+    })
+    next();
+  }catch{
+    res.send('fail');
+  }
 }
 
-
+//delete product
+module.exports.deleteProduct = async function (req, res) {
+  await productModel.findByIdAndDelete(req.params.id);
+  res.redirect("/products");
+};
