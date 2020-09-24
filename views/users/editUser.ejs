@@ -4,7 +4,7 @@
   <%- include('../layouts/nav'); %>
   <div class="container">
     <%- include('../msg-err/msg'); %>
-    <form action="/my-account/<%= user.id %>?_method=PATCH" method="post">
+    <form action="/my-account/<%= user._id %>?_method=PUT" method="post">
       <label for="name" class="sr-only">Name</label>
       <input type="text" id="name" name="name" class="form-control" placeholder="Name"
         value="<%= user.name %>">

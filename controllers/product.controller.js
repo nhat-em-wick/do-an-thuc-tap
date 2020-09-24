@@ -1,14 +1,15 @@
 const productModel = require("../models/product.model");
-//const { productValidation } = require("../validation/product.validation");
 const { model } = require("../models/product.model");
 const fs = require("fs");
+
 
 // search product
 module.exports.searchProduct = async (req, res) => {
   let q = req.query.q;
   let products = await productModel.find();
   let matchedProducts = products.filter((product) => {
-    return product.title.indexOf(q) !== -1;
+    // matched la 1 array
+    return product.title.indexOf(q) !== -1;// neu q nam trong title thi gia tri lon hon -1
   });
   if (matchedProducts.length<1) {
     res.render("products/searchProducts", {msg:'no search',products: matchedProducts});
@@ -105,3 +106,4 @@ module.exports.deleteProduct = async function (req, res) {
   await productModel.findByIdAndDelete(req.params.id);
   res.redirect("/products");
 };
+

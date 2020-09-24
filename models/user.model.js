@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 6
     },
+    isAdmin:{
+        type: String,
+        required: true,
+        default: false
+    },
     date: {
       type: Date,
       default: Date.now

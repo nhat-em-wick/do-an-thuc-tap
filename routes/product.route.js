@@ -29,6 +29,6 @@ router.get('/products/edit/:id', productController.getProduct);
 
 router.put('/products',upload.single('mybook'), productController.editProduct);
 
-router.delete('/products/:id',productController.deleteImage, productController.deleteProduct);
+router.delete('/products/:id', productController.deleteImage, productController.deleteProduct);
 
 module.exports = router;

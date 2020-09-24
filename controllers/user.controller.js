@@ -4,7 +4,7 @@ var jwt = require("jsonwebtoken");
 const {
   registerValidation,
   updateUserValidation,
-  loginValidation
+  loginValidation,
 } = require("../validation/user.validate");
 const { func } = require("@hapi/joi");
 const { model } = require("../models/user.model");
@@ -17,14 +17,14 @@ module.exports.registerPage = (req, res) => {
   res.render("users/register");
 };
 
-module.exports.editUser = async (req, res)=>{
+module.exports.editUser = async (req, res) => {
   const user = await userModel.findById(req.params.id);
-  res.render('users/editUser', { user:user });
-}
+  res.render("users/editUser", { user: user });
+};
 
 module.exports.myAccount = async (req, res) => {
   try {
-    const user = await userModel.findOne({ id: req.params._id });
+    const user = await userModel.findOne({ _id: req.params.id });
     res.render("users/myAccount", { user: user });
   } catch (error) {
     res.redirect("/");
@@ -46,11 +46,9 @@ module.exports.register = async (req, res) => {
       errs.push({ msg: error.details[0].message });
       res.render("users/register", { errs: errs, name, email, password });
     } else {
-        
       // hash password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
       // create user
       const user = new userModel({
         name: req.body.name,
@@ -67,6 +65,22 @@ module.exports.register = async (req, res) => {
   }
 };
 
+module.exports.Admin = async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(process.env.PASSWORD_ADMIN, salt);
+  try {
+    const user = new userModel({
+      name: process.env.NAME_ADMIN,
+      email: process.env.EMAIL_ADMIN,
+      password: hashedPassword,
+      isAdmin: true,
+    });
+    const userAdmin = await user.save();
+  } catch (error) {
+    res.send({ message: error.message });
+  }
+};
+
 module.exports.login = async (req, res) => {
   // validation data
   const { email, password } = req.body;
@@ -76,14 +90,12 @@ module.exports.login = async (req, res) => {
     errs.push({ msg: error.details[0].message });
     res.render("users/login", { errs: errs, email, password });
   }
-
   // checking if email exist
   const user = await userModel.findOne({ email: req.body.email });
   if (!user) {
     errs.push({ msg: "Email is not found!" });
     res.render("users/login", { errs: errs, email, password });
   }
-
   // password is correct
   const valiPass = await bcrypt.compare(req.body.password, user.password);
   if (!valiPass) {
@@ -95,37 +107,35 @@ module.exports.login = async (req, res) => {
       expiresIn: "1h",
     });
     res.header("auth-token", token);
-    console.log(token);
     //create cookie
     //res.cookie("access_token", token);
-    res.redirect(`/my-account/${user._id}`);
+    res.redirect(`/my-account/${user._id}`)
   }
 };
 
 //update user
-module.exports.patchUser = async (req, res)=>{
-  const user = await userModel.findOne({ id: req.params._id });
+module.exports.patchUser = async (req, res) => {
+  const user = await userModel.findOne({ _id: req.params.id });
   const { name, password } = req.body;
   const { error } = updateUserValidation(req.body);
   let errs = [];
   if (error) {
     errs.push({ msg: error.details[0].message });
-    res.render(`users/editUser` , { errs: errs, user:user });
-  }else{
+    res.render(`users/editUser`, { errs: errs, user: user });
+  } else {
     try {
       // hash password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-
       let updateUser = await userModel.updateOne(
-        {_id: user._id},
-        {$set:
-          {name: name,password:hashedPassword}
-         }
+        { _id: user._id },
+        {
+          $set: { name: name, password: hashedPassword },
+        }
       );
       res.redirect(`/my-account/${user._id}`);
-    } catch (error) {
-      res.render('my-account/editUser',{user:user});
+    } catch{
+      res.redirect(`/my-account/edit/${user._id}`);
     }
   }
-}
+};
