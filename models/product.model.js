@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const { string } = require('@hapi/joi');
-
 const productSchema = new mongoose.Schema({
     title:{
         type: String,

@@ -17,7 +17,7 @@ router.get('/my-account/:id', userController.myAccount);
 
 router.get('/my-account/edit/:id', userController.editUser);
 //edit
-router.put('/my-account/:id', userController.patchUser);
+router.put('/my-account/:id', userController.putUser);
 
 router.get('/admin', userController.Admin);
 

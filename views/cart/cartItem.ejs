@@ -1,0 +1,17 @@
+<%- include('../layouts/header'); %>
+<body>
+    <div class= "container">
+        <div class="row">
+            <% for(let product of Object.values(session.cart.items)){ %> 
+                <div class="col-3">
+                    <img src="<%= product.item.image%>" width="200px">
+                    <h4><%= product.item.title %></h4>
+                    <span><%= product.item.description %> </span><br>
+                    <span><%= product.item.price %> </span><br>
+                </div>
+            <% } %> 
+        </div>
+        <div>Total Qty: <span><%= session.cart.totalQty %></span></div>
+        <div>Total Price: <span><%= session.cart.totalPrice %></span></div>
+    </div>
+</body>

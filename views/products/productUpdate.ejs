@@ -1,0 +1,23 @@
+<%- include('../layouts/header'); %>
+<body>
+    <%- include('../layouts/nav'); %>
+    <h1>Product Update</h1>
+    <div class="container">
+        <div class="row">
+          <div class="col-3">
+            <img src="/<%= product.image %>" width="200px">
+            <h4><%= product.title %></h4>
+            <span><%= product.description %> </span><br>
+            <span><%= product.price %> </span>
+            <br>
+            <button class="add-to-cart btn btn-primary">Add to Cart</button>
+            <a href="/products/edit/<%= product.id %>" class="btn btn-info">Edit</a>
+            <form action="/products/<%= product.id %>?_method=DELETE" method="POST" class="d-inline">
+              <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+          </div>
+        </div>
+      </div>
+
+  <%- include('../layouts/footer'); %>
+</body>

@@ -4,7 +4,7 @@
   <%- include('../layouts/nav'); %>
   <div class="container">
     <%- include('../msg-err/msg'); %>
-    <form action="/products?_method=PUT"  method="post" enctype="multipart/form-data">
+    <form action="/products/<%= product._id %>?_method=PUT"  method="post" enctype="multipart/form-data">
       <label for="title" class="sr-only">Title</label>
       <input type="text" id="title" name="title" class="form-control" placeholder="Name" value="<%= product.title %>">
       <label for="description" class="sr-only">Description</label>

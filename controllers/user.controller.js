@@ -43,18 +43,18 @@ module.exports.register = async (req, res) => {
     // checking if user is already in the database
     const emailExist = await userModel.findOne({ email: req.body.email });
     if (emailExist) {
-      errs.push({ msg: error.details[0].message });
+      errs.push({ msg: "email exits" });
       res.render("users/register", { errs: errs, name, email, password });
     } else {
-      // hash password
+      // // hash password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(req.body.password, salt);
       // create user
       const user = new userModel({
         name: req.body.name,
         email: req.body.email,
-        password: hashedPassword,
-      });
+        password: hashedPassword
+      }); 
       try {
         let saveUSer = await user.save();
         res.redirect("/login");
@@ -114,7 +114,7 @@ module.exports.login = async (req, res) => {
 };
 
 //update user
-module.exports.patchUser = async (req, res) => {
+module.exports.putUser = async (req, res) => {
   const user = await userModel.findOne({ _id: req.params.id });
   const { name, password } = req.body;
   const { error } = updateUserValidation(req.body);

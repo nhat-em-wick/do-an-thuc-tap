@@ -1,17 +1,51 @@
 <%- include('../layouts/header'); %>
 <body>
-    <%- include('../layouts/nav'); %>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/products">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" >User</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cart" >Cart
+                <span id="#cartCount"><%= session.cart ? session.cart.totalQty : ''%></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+          </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0" method="GET" action="/products/seach">
+            <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+</header>
     <h1>Products</h1>
     <div class="container">
         <div class="row">
           <% products.forEach(product => { %>
           <div class="col-3">
-            <img src="<%= product.image %>" width="200px">
+            <img src="<%= product.image%>" width="200px">
             <h4><%= product.title %></h4>
             <span><%= product.description %> </span><br>
             <span><%= product.price %> </span>
             <br>
-            <a href="#" class="btn btn-primary">Add to Cart</a>
+            <button data-product="<%= JSON.stringify(product)%>" class="add-to-cart btn btn-primary">Add to Cart</button>
             <a href="/products/edit/<%= product.id %>" class="btn btn-info">Edit</a>
             <form action="/products/<%= product.id %>?_method=DELETE" method="POST" class="d-inline">
               <button type="submit" class="btn btn-danger">Delete</button>
@@ -22,4 +56,21 @@
       </div>
       <%- include('./pagination'); %>
     <%- include('../layouts/footer'); %>
+    <script>
+      let addToCart = document.querySelectorAll('.add-to-cart');
+      let cartCounter = document.querySelector('#cartCount');
+      function updateCart(product){
+        axios.post('/updateCart', product).then(function (res) {
+        
+          cartCounter.innerText = res.data.totalQty;
+        })
+      }
+      
+      addToCart.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+      var product = JSON.parse(btn.dataset.product);
+      updateCart(product);
+      });
+});
+    </script>
 </body>

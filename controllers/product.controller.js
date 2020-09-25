@@ -40,6 +40,15 @@ module.exports.showAddProduct = (req, res) => {
   res.render("products/addProduct");
 };
 
+module.exports.showProductUpdate = async (req, res) => {
+  try {
+    const product = await productModel.findOne({ _id: req.params.id });
+    res.render("products/productUpdate", { product: product });
+  } catch (error) {
+    //res.redirect("/");
+  }
+};
+
 // add product
 module.exports.addProduct = async (req, res) => {
   const { title, description, price } = req.body;
@@ -66,8 +75,8 @@ module.exports.getProduct = async (req, res) => {
 
 //update product
 module.exports.editProduct = async (req, res) => {
+  const product = await productModel.findOne({ _id: req.params.id });
   const { title, description, price } = req.body;
-  const product = await productModel.findOne({ id: req.params._id });
   req.body.mybook = req.file.path.split("/").slice(1).join("/");
   try {
     let updateProduct = await productModel.updateOne(
@@ -81,9 +90,9 @@ module.exports.editProduct = async (req, res) => {
         },
       }
     );
-    res.redirect("/products");
+    res.redirect(`/products/${product._id}`);
   } catch {
-    res.render(`product/edit/${product._id}`);
+    //res.render(`product/edit/${product._id}`);
   }
 };
 
