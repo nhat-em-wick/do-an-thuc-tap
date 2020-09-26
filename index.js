@@ -44,7 +44,7 @@ app.use(session({
     resave: false, 
     store: mongoStore,
     saveUninitialized: false, 
-    cookie: { maxAge: 1000 * 60 * 60 * 3 } // 3 hour
+    cookie: { maxAge: 1000 * 60 * 60 * 1 } // 1 hour
 }))
 
 app.use((req, res, next) => {
