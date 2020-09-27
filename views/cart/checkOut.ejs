@@ -1,0 +1,11 @@
+<%- include('../layouts/header'); %>
+<body>
+    <%- include('../layouts/nav'); %>
+    <%= user.name %> 
+    <form action="/orders" method="post">
+        <input type="text" name="phone" placeholder="phone">
+        <input type="text" name="address" placeholder="address">
+        <button type="submit">Order</button>
+    </form>
+    
+</body>

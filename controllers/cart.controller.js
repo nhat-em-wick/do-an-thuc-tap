@@ -1,4 +1,3 @@
-const { db } = require("../models/user.model");
 
 module.exports.updateCart = (req, res) => {
   if (!req.session.cart) {

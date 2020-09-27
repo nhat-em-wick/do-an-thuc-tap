@@ -8,6 +8,7 @@ const {
 } = require("../validation/user.validate");
 const { func } = require("@hapi/joi");
 const { model } = require("../models/user.model");
+const { use } = require("../routes/cart.route");
 
 module.exports.loginPage = (req, res) => {
   res.render("users/login");
@@ -106,10 +107,15 @@ module.exports.login = async (req, res) => {
     const token = await jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
     });
-    res.header("auth-token", token);
+    res.header('auth-token',token).send({
+      _id:user.id,
+      name:user.name,
+      email:user.email,
+      isAdmin:user.isAdmin
+    });
     //create cookie
     //res.cookie("access_token", token);
-    res.redirect(`/my-account/${user._id}`)
+    //res.redirect(`/my-account/${user._id}`)
   }
 };
 

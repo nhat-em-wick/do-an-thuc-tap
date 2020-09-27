@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const routeUser = require('./routes/user.route');
 const productRoute = require('./routes/product.route')
 const routeCart = require('./routes/cart.route')
+const routeOrder = require('./routes/order.route')
 
 const methodOverride = require("method-override");
 const multer = require('multer');
@@ -61,7 +62,7 @@ app.get('/', (req, res)=>{
 app.use('/', routeUser);
 app.use('/', productRoute);
 app.use('/', routeCart);
-
+app.use('/', routeOrder);
 const port = process.env.PORT_ACCESS || 3500;
 
 
