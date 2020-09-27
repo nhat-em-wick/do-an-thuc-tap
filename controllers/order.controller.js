@@ -24,7 +24,6 @@ module.exports.store = async (req, res)=>{
         address: address,
         totalQty: req.session.cart.totalQty,
         totalPrice: req.session.cart.totalPrice
-        
     })
     order = await order.save();
     delete req.session.cart;

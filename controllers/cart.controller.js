@@ -8,7 +8,6 @@ module.exports.updateCart = (req, res) => {
     };
   }
   let cart = req.session.cart;
-  // check item in cart
   if (!cart.items[req.body._id]) {
     cart.items[req.body._id] = {
       item: req.body,

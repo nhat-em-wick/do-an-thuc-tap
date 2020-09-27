@@ -2,7 +2,6 @@ const productModel = require("../models/product.model");
 const { model } = require("../models/product.model");
 const fs = require("fs");
 
-// search product
 module.exports.searchProduct = async (req, res) => {
   let q = req.query.q;
   let products = await productModel.find();
@@ -69,13 +68,13 @@ module.exports.addProduct = async (req, res) => {
   }
 };
 
-// get product
+
 module.exports.getProduct = async (req, res) => {
   const product = await productModel.findById(req.params.id);
   res.render("products/editProduct", { product: product });
 };
 
-//update product
+
 module.exports.editProduct = async (req, res) => {
   const product = await productModel.findOne({ _id: req.params.id });
   const { title, description, price } = req.body;
@@ -112,7 +111,6 @@ module.exports.deleteImage = async (req, res, next) => {
   }
 };
 
-//delete product
 module.exports.deleteProduct = async function (req, res) {
   await productModel.findByIdAndDelete(req.params.id);
   res.redirect("/products");

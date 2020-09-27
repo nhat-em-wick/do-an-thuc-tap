@@ -2,7 +2,6 @@ const express = require("express");
 const productController = require('../controllers/product.controller');
 const verify = require('./verifyToken');
 const multer = require('multer');
-//var upload = multer({ dest: './public/images' })
 const path =require('path');
 const router = express.Router();
 

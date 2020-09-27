@@ -4,7 +4,6 @@ const productValidation =  (data) => {
         title: Joi.string().required(),
         description: Joi.string().required(),
         price: Joi.number().required(),
-        //image: Joi.string().required()
     });
     return schema.validate(data);
 }
