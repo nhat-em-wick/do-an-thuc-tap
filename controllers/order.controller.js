@@ -8,7 +8,6 @@ module.exports.index = async (req, res)=>{
     const decoded = jwt.decode(token);
     const user = await userModel.findOne({_id: decoded._id});
     res.render('cart/checkOut',{user: user});
-
 }
 
 module.exports.store = async (req, res)=>{
@@ -22,8 +21,17 @@ module.exports.store = async (req, res)=>{
         customerId:decoded._id,
         items: req.session.cart.items,
         phone: phone,
-        address: address
+        address: address,
+        totalQty: req.session.cart.totalQty,
+        totalPrice: req.session.cart.totalPrice
+        
     })
     order = await order.save();
-    res.redirect('/');
+    delete req.session.cart;
+    res.redirect(`/orders/${order._id}`);
+}
+
+module.exports.showOrder = async (req, res)=>{
+    let order = await orderModel.findById(req.params.id);
+    res.render('cart/showOrder', {order: order});
 }

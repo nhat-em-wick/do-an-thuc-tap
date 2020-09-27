@@ -6,9 +6,6 @@ const {
   updateUserValidation,
   loginValidation,
 } = require("../validation/user.validate");
-const { func } = require("@hapi/joi");
-const { model } = require("../models/user.model");
-const { use } = require("../routes/cart.route");
 
 module.exports.loginPage = (req, res) => {
   res.render("users/login");
