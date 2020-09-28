@@ -31,9 +31,12 @@ module.exports.myAccount = async (req, res) => {
 
 module.exports.register = async (req, res) => {
   // validation data
-  const { name, email, password } = req.body;
+  const { name, email, password, conf_password } = req.body;
   const { error } = registerValidation(req.body);
   let errs = [];
+  if(password!==conf_password){
+    res.send({message:"Password not match"});
+  }
   if (error) {
     errs.push({ msg: error.details[0].message });
     res.render("users/register", { errs: errs, name, email, password });
@@ -55,7 +58,7 @@ module.exports.register = async (req, res) => {
       }); 
       try {
         let saveUSer = await user.save();
-        res.redirect("/login");
+        res.send({message:""});
       } catch (error) {
         res.sendStatus(404);
       }
@@ -102,26 +105,26 @@ module.exports.login = async (req, res) => {
   } else {
     // create and assign a token
     const token = await jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "4h",
     });
-    res.header('auth-token',token).send({
-      _id:user.id,
-      name:user.name,
-      email:user.email,
-      isAdmin:user.isAdmin
+     res.header('auth-token',token).send({
+     user: user,token
     });
     //create cookie
-    //res.cookie("access_token", token);
-    //res.redirect(`/my-account/${user._id}`)
+    // res.cookie("access_token", token);
+    // res.redirect(`/my-account/${user._id}`)
   }
 };
 
 //update user
 module.exports.putUser = async (req, res) => {
   const user = await userModel.findOne({ _id: req.params.id });
-  const { name, password } = req.body;
+  const { name, password, conf_password } = req.body;
   const { error } = updateUserValidation(req.body);
   let errs = [];
+  if(password !== conf_password){
+    res.send({message:"Password no matched"})
+  }
   if (error) {
     errs.push({ msg: error.details[0].message });
     res.render(`users/editUser`, { errs: errs, user: user });
@@ -142,3 +145,9 @@ module.exports.putUser = async (req, res) => {
     }
   }
 };
+
+
+module.exports.logOut = (req, res)=>{
+  
+  res.redirect('/');
+}

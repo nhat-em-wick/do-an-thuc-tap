@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const { string, number } = require('@hapi/joi');
+
 const orderSchema = new mongoose.Schema({
-    customerId:{type: String,required:true},
+    customerId:{ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
     items: { type: Object, required: true },
     phone: { type: String, required: true},
     address: { type: String, required: true},

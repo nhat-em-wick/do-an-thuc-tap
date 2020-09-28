@@ -1,20 +1,28 @@
 const express = require("express");
 const productController = require('../controllers/product.controller');
 const verify = require('./verifyToken');
+const router = express.Router();
 const multer = require('multer');
 const path =require('path');
-const router = express.Router();
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './public/images')
-    },
-    filename: function (req, file, cb) {
+  destination: './public/images',
+  filename: function(req, file, cb){
       cb(null, file.fieldname + '-' + Date.now()+path.extname(file.originalname))
+  }
+});
+
+var upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
-})
-   
-const upload = multer({ storage: storage });
+  }
+});
 
 router.get('/products/seach', productController.searchProduct)
 
@@ -22,7 +30,7 @@ router.get('/products', productController.listProduct);
 
 router.get('/products/add', productController.showAddProduct);
 
-router.post('/products/add', upload.single('mybook') ,productController.addProduct);
+router.post('/products/add',upload.single('mybook') ,productController.addProduct);
 
 router.get('/products/edit/:id', productController.getProduct);
 

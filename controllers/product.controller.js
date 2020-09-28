@@ -2,6 +2,9 @@ const productModel = require("../models/product.model");
 const { model } = require("../models/product.model");
 const fs = require("fs");
 
+
+
+
 module.exports.searchProduct = async (req, res) => {
   let q = req.query.q;
   let products = await productModel.find();
@@ -54,18 +57,19 @@ module.exports.showProductUpdate = async (req, res) => {
 module.exports.addProduct = async (req, res) => {
   const { title, description, price } = req.body;
   req.body.mybook = req.file.path.split("/").slice(1).join("/");
-  try {
-    const product = new productModel({
-      title: title,
-      description: description,
-      price: price,
-      image: req.body.mybook,
-    });
-    let saveProduct = await product.save();
-    res.redirect("/products");
-  } catch (error) {
-    errs.push({ msg: "Add Product Fail!" });
-  }
+    try {
+      const product = new productModel({
+        title: title,
+        description: description,
+        price: price,
+        image: req.body.mybook,
+      });
+      let saveProduct = await product.save();
+      res.redirect("/products");
+    } catch (error) {
+      res.send({ msg: "Add Product Fail!" });
+    }
+  
 };
 
 

@@ -6,7 +6,6 @@ const verifyAdmin = require('./verifyAdmin');
 
 router.get('/login', userController.loginPage);
 
-
 router.get('/register', userController.registerPage );
 
 router.post('/my-account', userController.login);
@@ -21,5 +20,5 @@ router.put('/my-account/:id', userController.putUser);
 
 router.get('/admin', userController.Admin);
 
-
+router.get('/logout',verify, userController.logOut);
 module.exports = router;
