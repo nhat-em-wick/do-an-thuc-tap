@@ -14,6 +14,7 @@ const path =require('path');
 const session = require('express-session')
 const flash = require('express-flash')
 const MongoDbStore = require('connect-mongo')(session)
+const cors = require('cors');
 
 mongoose.connect(process.env.DB_CONNECTION, {
   useNewUrlParser: true,
@@ -38,7 +39,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(express.static('./public'));
-
+app.use(cors());
 
 app.use(session({
   secret: 'bshdvghsvd',

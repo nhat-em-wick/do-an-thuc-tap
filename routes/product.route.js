@@ -2,6 +2,7 @@ const express = require("express");
 const productController = require('../controllers/product.controller');
 const verify = require('./verifyToken');
 const router = express.Router();
+
 const multer = require('multer');
 const path =require('path');
 
@@ -15,7 +16,8 @@ const storage = multer.diskStorage({
 var upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || 
+    file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
       cb(null, true);
     } else {
       cb(null, false);

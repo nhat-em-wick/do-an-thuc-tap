@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    date: {
-      type: Date,
-      default: Date.now
+    resetLink:{
+        type: String,
+        default:''
     }
-});
+},{timestamps:true});
 
 module.exports = mongoose.model('Users', userSchema)

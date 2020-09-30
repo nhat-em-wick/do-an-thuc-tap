@@ -95,7 +95,7 @@ module.exports.editProduct = async (req, res) => {
         },
       }
     );
-    res.redirect(`/products/${product._id}`);
+    res.send({product:product});
   } catch {
     //res.render(`product/edit/${product._id}`);
   }

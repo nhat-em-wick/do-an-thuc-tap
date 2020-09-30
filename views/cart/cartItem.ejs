@@ -3,24 +3,29 @@
     <%- include('../layouts/nav'); %>
     <div class= "container">
         <div class="row">
-            <% for(let product of Object.values(session.cart.items)){ %> 
-                <div class="col-3">
-                    <img src="/<%= product.item.image%>" width="200px">
-                    <h4><%= product.item.title %></h4>
-                    <span>description: <%= product.item.description %> </span><br>
-                    <span>price: <%= product.item.price %> </span><br>
-                    <span>Qty: <%= product.qty%></span>
-                    <form action="/cart/<%= product.item._id%>?_method=DELETE" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                <% if(!session.cart){ %> 
+                    <h1>no item</h1>
+                <% }else{ %> 
+                    <% for(let product of Object.values(session.cart.items)){ %> 
+                        <div class="col-3">
+                            <img src="/<%= product.item.image%>" width="200px">
+                            <h4><%= product.item.title %></h4>
+                            <span>description: <%= product.item.description %> </span><br>
+                            <span>price: <%= product.item.price %> </span><br>
+                            <span>Qty: <%= product.qty%></span>
+                            <form action="/cart/<%= product.item._id%>?_method=DELETE" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    <% } %>
+                    <div>Total Qty: <span><%= session.cart.totalQty %></span></div>
+                    <div>Total Price: <span><%= session.cart.totalPrice %></span></div>
+                    <form action="/orders" method="get">
+                        <button type="submit">Checkout</button>
                     </form>
-                </div>
-            <% } %> 
+                <% } %>  
         </div>
-        <div>Total Qty: <span><%= session.cart.totalQty %></span></div>
-        <div>Total Price: <span><%= session.cart.totalPrice %></span></div>
-        <form action="/orders" method="get">
-            <button type="submit">Checkout</button>
-        </form>
+       
     </div>
       </script>
 </body>

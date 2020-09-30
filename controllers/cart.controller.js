@@ -20,7 +20,7 @@ module.exports.updateCart = (req, res) => {
     cart.totalQty += 1;
     cart.totalPrice += req.body.price;
   }
-  res.send({ totalQty: req.session.cart});
+  res.json({ totalQty: req.session.cart.totalQty});
 };
 
 module.exports.getItemCart = (req, res) => {
